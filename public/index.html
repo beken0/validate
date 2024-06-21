@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Doğrulayıcı</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="./style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">JSON Validator</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link custom" href="index.html">Ana Sayfa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link custom" href="# ">Bize Ulaşın</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ana İçerik -->
+    <div id="main-content" class="container mt-5">
+        <div class="jumbotron">
+            <h1 class="display-6">JSON Doğrulayıcı</h1>
+            <p class="lead">JSON verilerinizi doğrulayın!</p>
+            <hr class="my-4">
+            <textarea class="form-control mb-3" id="jsonInput" rows="10" placeholder='Json Veri Girişi Örn : { "eBooks" : "first" }'></textarea>
+            <button class="btn btn-secondary" onclick="validateJSON()"><i class="bi bi-card-checklist btn-icon"></i>JSON Doğrula</button>
+            <button class="btn btn-success" onclick="formatJSON()"><i class="bi bi-code-slash btn-icon"></i>JSON Formatla</button>
+            <div id="validationResult" class="mt-3"></div>
+            <pre id="output" class="mt-3"></pre>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS ve Popper.js (opsiyonel, gerektiği durumda) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+        async function validateJSON() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            try {
+                const jsonData = JSON.parse(jsonInput);
+                const response = await fetch('/validate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonInput
+                });
+                const result = await response.json();
+
+                // JSON doğrulama sonucunu görsel olarak göster
+                const validationResultDiv = document.getElementById('validationResult');
+                const outputDiv = document.getElementById('output');
+
+                // Sonuçları temizle
+                validationResultDiv.innerHTML = '';
+                outputDiv.textContent = '';
+
+                if (result.valid) {
+                    validationResultDiv.innerHTML = '<div class="valid-label">JSON Doğrulama Başarılı</div>';
+                    outputDiv.textContent = JSON.stringify(result.data, null, 2);
+                } else {
+                    validationResultDiv.innerHTML = '<div class="invalid-label">JSON Geçersiz veya Sunucu Hatası</div>';
+                    outputDiv.textContent = '';
+                }
+            } catch (error) {
+                // JSON parse hatası durumunda
+                const validationResultDiv = document.getElementById('validationResult');
+                validationResultDiv.innerHTML = '<div class="invalid-label">JSON Verisi Geçersiz! </div>';
+                document.getElementById('output').textContent = '';
+                console.error('JSON parse hatası:', error.message);
+            }
+        }
+
+        function formatJSON() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            try {
+                const jsonData = JSON.parse(jsonInput);
+                document.getElementById('jsonInput').value = JSON.stringify(jsonData, null, 2);
+            } catch (error) {
+                console.error('JSON formatlama hatası:', error.message);
+            }
+        }
+    </script>
+</body>
+</html>
