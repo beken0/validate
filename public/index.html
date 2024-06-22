@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON Doğrulayıcı</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
     <link href="./style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
+
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.html">JSON Validator</a>
@@ -31,7 +29,6 @@
         </div>
     </nav>
 
-    <!-- Ana İçerik -->
     <div id="main-content" class="container mt-5">
         <div class="jumbotron">
             <h1 class="display-6">JSON Doğrulayıcı</h1>
@@ -45,11 +42,9 @@
         </div>
     </div>
 
-    <!-- Bootstrap 5 JS ve Popper.js (opsiyonel, gerektiği durumda) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
 
-    <!-- JavaScript -->
     <script>
         async function validateJSON() {
             const jsonInput = document.getElementById('jsonInput').value;
@@ -64,11 +59,9 @@
                 });
                 const result = await response.json();
 
-                // JSON doğrulama sonucunu görsel olarak göster
                 const validationResultDiv = document.getElementById('validationResult');
                 const outputDiv = document.getElementById('output');
 
-                // Sonuçları temizle
                 validationResultDiv.innerHTML = '';
                 outputDiv.textContent = '';
 
@@ -80,7 +73,6 @@
                     outputDiv.textContent = '';
                 }
             } catch (error) {
-                // JSON parse hatası durumunda
                 const validationResultDiv = document.getElementById('validationResult');
                 validationResultDiv.innerHTML = '<div class="invalid-label">JSON Verisi Geçersiz! </div>';
                 document.getElementById('output').textContent = '';
@@ -94,7 +86,7 @@
                 const jsonData = JSON.parse(jsonInput);
                 document.getElementById('jsonInput').value = JSON.stringify(jsonData, null, 2);
             } catch (error) {
-                console.error('JSON formatlama hatası:', error.message);
+                console.error('JSON formatlama hatası : ', error.message);
             }
         }
     </script>
